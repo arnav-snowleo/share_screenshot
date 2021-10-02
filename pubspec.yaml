@@ -14,8 +14,7 @@ dependencies:
 
   screenshot: ^1.2.3
   share: ^2.0.4
-  #image_gallery_saver: ^1.7.0
-  #permission_handler: ^8.1.6
+
   path_provider: 
 
 dev_dependencies:

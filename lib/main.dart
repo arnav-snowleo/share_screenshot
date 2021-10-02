@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'dart:typed_data';
 import 'package:screenshot/screenshot.dart';
 import 'package:share/share.dart';
-// import 'package:image_gallery_saver/image_gallery_saver.dart';
-// import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 
 void main() {
@@ -44,9 +42,7 @@ class MyScreen extends StatelessWidget {
                   if (image == null) {
                     print('failed to capture');
                   } else {
-                    // await saveImage(image);
                     await saveAndShare(image);
-                    print('saveAndShare done');
                   }
                 },
                 child: Text('capture and share')),
@@ -55,15 +51,6 @@ class MyScreen extends StatelessWidget {
       ),
     );
   }
-
-  // Future<String> saveImage(Uint8List bytes) async {
-  //   await [Permission.storage].request();
-
-  //   final time = DateTime.now();
-  //   final name = 'screenshot_$time';
-  //   final result = await ImageGallerySaver.saveImage(bytes, name: name);
-  //   return result['filePath'];
-  // }
 
   Future saveAndShare(Uint8List bytes) async {
     final directory = await getApplicationDocumentsDirectory();
@@ -87,77 +74,3 @@ class MyScreen extends StatelessWidget {
     );
   }
 }
-
-// class MyScreen extends StatelessWidget {
-//   ScreenshotController screenshotController = ScreenshotController();
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Column(
-//         children: [
-//           Screenshot(
-//             controller: screenshotController,
-//             child: Container(
-//               height: 400,
-//               color: Colors.green,
-//               child: Column(
-//                 children: [
-//                   Container(
-//                       padding: const EdgeInsets.all(30.0),
-//                       decoration: BoxDecoration(
-//                         border:
-//                             Border.all(color: Colors.blueAccent, width: 5.0),
-//                         color: Colors.amberAccent,
-//                       ),
-//                       child: Text("some widget")),
-//                 ],
-//               ),
-//             ),
-//           ),
-//           SizedBox(
-//             height: 25,
-//           ),
-//           ElevatedButton(
-//             child: Text(
-//               'Capture Above Widget',
-//             ),
-//             onPressed: () {
-//               screenshotController
-//                   .capture(delay: Duration(milliseconds: 10))
-//                   .then((capturedImage) async {
-//                 ShowCapturedWidget(context, capturedImage!);
-//               }).catchError((onError) {
-//                 print(onError);
-//               });
-//             },
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   Future<dynamic> ShowCapturedWidget(
-//       BuildContext context, Uint8List capturedImage) {
-//     return showDialog(
-//       useSafeArea: false,
-//       context: context,
-//       builder: (context) => Scaffold(
-//           appBar: AppBar(
-//             title: Text("Captured widget screenshot"),
-//           ),
-//           body: Column(
-//             children: [
-//               Center(
-//                   child: capturedImage != null
-//                       ? Image.memory(capturedImage)
-//                       : Container()),
-//               ElevatedButton(
-//                   onPressed: () {
-//                     print('sharing ');
-//                   },
-//                   child: Text('share'))
-//             ],
-//           )),
-//     );
-//   }
-// }
