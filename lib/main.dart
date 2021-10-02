@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'dart:typed_data';
 import 'package:screenshot/screenshot.dart';
 import 'package:share/share.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:permission_handler/permission_handler.dart';
+// import 'package:image_gallery_saver/image_gallery_saver.dart';
+// import 'package:permission_handler/permission_handler.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -39,26 +42,38 @@ class MyScreen extends StatelessWidget {
                   final image = await _screenshotController.capture();
 
                   if (image == null) {
-                    print('no image taken');
+                    print('failed to capture');
                   } else {
-                    await saveImage(image);
-                    print('saved to gallery');
+                    // await saveImage(image);
+                    await saveAndShare(image);
+                    print('saveAndShare done');
                   }
                 },
-                child: Text('capture Screen')),
+                child: Text('capture and share')),
           ],
         ),
       ),
     );
   }
 
-  Future<String> saveImage(Uint8List bytes) async {
-    await [Permission.storage].request();
+  // Future<String> saveImage(Uint8List bytes) async {
+  //   await [Permission.storage].request();
+
+  //   final time = DateTime.now();
+  //   final name = 'screenshot_$time';
+  //   final result = await ImageGallerySaver.saveImage(bytes, name: name);
+  //   return result['filePath'];
+  // }
+
+  Future saveAndShare(Uint8List bytes) async {
+    final directory = await getApplicationDocumentsDirectory();
 
     final time = DateTime.now();
-    final name = 'screenshot_$time';
-    final result = await ImageGallerySaver.saveImage(bytes, name: name);
-    return result['filePath'];
+    final image = File('${directory.path}/_${time}_flutter.png');
+    image.writeAsBytesSync(bytes);
+
+    final text = 'Download DUNO!';
+    await Share.shareFiles([image.path], text: text);
   }
 
   Widget buildImage() {
