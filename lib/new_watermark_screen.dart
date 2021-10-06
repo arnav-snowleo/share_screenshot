@@ -25,8 +25,8 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
 
   File? _capturedImage;
   File? _watermarkImage;
-  // File _watermarkedImage;
-  File? _watermarkedImage;
+  Uint8List? _watermarkedImage;
+  // File? _watermarkedImage;
   Uint8List? img;
 
   File? _getCapturedImgFile;
@@ -53,6 +53,16 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
     //   final text = 'Download the app!';
     //   await Share.shareFiles([image.path], text: text);
     // }
+
+    Future shareIt(Uint8List bytes) async {
+      final directory = await getApplicationDocumentsDirectory();
+
+      final image = File('${directory.path}/waterMarked.png');
+      image.writeAsBytesSync(bytes);
+
+      final text = 'Download the app!';
+      await Share.shareFiles([image.path], text: text);
+    }
 
     Widget buildImage() {
       return Container(
@@ -157,45 +167,49 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
                 });
                 print('captured img got and setstate');
 
-                // if (gotCaptured == null || gotAppIcon == null) {
-                //   return;
-                // }
-                // //start watermark process
-                // ui.Image? originalImage =
-                //     ui.decodeImage(gotCaptured!.readAsBytesSync());
-                // ui.Image? watermarkImage =
-                //     ui.decodeImage(gotAppIcon!.readAsBytesSync());
+                if (gotCaptured == null || gotAppIcon == null) {
+                  return;
+                }
+                //start watermark process
+                ui.Image? originalImage =
+                    ui.decodeImage(gotCaptured!.readAsBytesSync());
+                ui.Image? watermarkImage =
+                    ui.decodeImage(gotAppIcon!.readAsBytesSync());
 
-                // // add watermark over originalImage
-                // // initialize width and height of watermark image
-                // ui.Image? image = ui.Image(50, 50);
-                // ui.drawImage(image, watermarkImage!);
+                // add watermark over originalImage
+                // initialize width and height of watermark image
+                ui.Image? image = ui.Image(50, 50);
+                ui.drawImage(image, watermarkImage!);
 
-                // // give position to watermark over image
-                // // originalImage.width - 50 - 25 (width of originalImage - width of watermarkImage - extra margin you want to give)
-                // // originalImage.height - 50 - 25 (height of originalImage - height of watermarkImage - extra margin you want to give)
-                // ui.copyInto(originalImage!, image,
-                //     dstX: originalImage.width - 50 - 25,
-                //     dstY: originalImage.height - 50 - 25);
+                // give position to watermark over image
+                // originalImage.width - 50 - 25 (width of originalImage - width of watermarkImage - extra margin you want to give)
+                // originalImage.height - 50 - 25 (height of originalImage - height of watermarkImage - extra margin you want to give)
+                ui.copyInto(originalImage!, image,
+                    dstX: originalImage.width - 50 - 25,
+                    dstY: originalImage.height - 50 - 25);
 
-                // // for adding text over image
-                // // Draw some text using 24pt arial font
-                // // 100 is position from x-axis, 120 is position from y-axis
-                // // ui.drawString(
-                // //     originalImage, ui.arial_24, 100, 120, 'try our app');
+                // for adding text over image
+                // Draw some text using 24pt arial font
+                // 100 is position from x-axis, 120 is position from y-axis
+                // ui.drawString(
+                //     originalImage, ui.arial_24, 100, 120, 'try our app');
 
-                // // Store the watermarked image to a File
-                // List<int> wmImage = ui.encodePng(originalImage);
-                // setState(() {
-                //   _watermarkedImage =
-                //       File.fromRawPath(Uint8List.fromList(wmImage));
-                // });
-                // // _watermarkedImage =
-                // //     File.fromRawPath(Uint8List.fromList(wmImage));
+                // Store the watermarked image to a File
+                List<int> wmImage = ui.encodePng(originalImage);
+                setState(() {
+                  // _watermarkedImage =
+                  // File.fromRawPath(Uint8List.fromList(wmImage));
+                  _watermarkedImage = Uint8List.fromList(wmImage);
+                });
+                // _watermarkedImage =
+                //     File.fromRawPath(Uint8List.fromList(wmImage));
 
-                // if (_watermarkedImage != null) {
-                //   print('done watermarking');
-                // }
+                if (_watermarkedImage != null) {
+                  print('done watermarking');
+
+                  await shareIt(_watermarkedImage!);
+                  print('sharing');
+                }
 
                 //end
               },
@@ -233,7 +247,7 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
 // I/flutter (22455): height
 // I/flutter (22455): 1920
 
-
+// Skipped 111 frames!  The application may be doing too much work on its main thread.
 //error-> Unhandled Exception: Null check operator used on a null value
 //ref->
 //https://stackoverflow.com/questions/64278595/null-check-operator-used-on-a-null-value
