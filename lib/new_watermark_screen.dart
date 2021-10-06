@@ -119,6 +119,7 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
     return Screenshot(
       controller: _screenshotController,
       child: Scaffold(
+        backgroundColor: Colors.amberAccent,
         appBar: AppBar(),
         body: Column(
           children: [
@@ -182,17 +183,13 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
                 ui.drawImage(image, watermarkImage!);
 
                 // give position to watermark over image
-                // originalImage.width - 50 - 25 (width of originalImage - width of watermarkImage - extra margin you want to give)
-                // originalImage.height - 50 - 25 (height of originalImage - height of watermarkImage - extra margin you want to give)
                 ui.copyInto(originalImage!, image,
                     dstX: originalImage.width - 50 - 25,
                     dstY: originalImage.height - 50 - 25);
 
-                // for adding text over image
-                // Draw some text using 24pt arial font
-                // 100 is position from x-axis, 120 is position from y-axis
-                // ui.drawString(
-                //     originalImage, ui.arial_24, 100, 120, 'try our app');
+                // for adding text over image (x,y)
+                ui.drawString(originalImage, ui.arial_48, 75,
+                    originalImage.height - 50 - 25, 'try our app now');
 
                 // Store the watermarked image to a File
                 List<int> wmImage = ui.encodePng(originalImage);
@@ -215,13 +212,6 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
               },
               child: Text('process image'),
             ),
-            // _watermarkedImage != null
-            //     ? Container(
-            //         height: 200,
-            //         width: 200,
-            //         child: Image.file(_watermarkedImage!),
-            //       )
-            //     : Text('empty watermarkedImage'),
             if (gotCaptured != null)
               Container(
                 height: 100,
@@ -240,7 +230,6 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
     );
   }
 }
-
 
 // I/flutter (22455): width
 // I/flutter (22455): 1080
