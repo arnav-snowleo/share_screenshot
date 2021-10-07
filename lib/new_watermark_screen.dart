@@ -40,6 +40,7 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
     }
 
     Future<String> getFilePath() async {
+      await [Permission.storage].request();
       // Directory appDocumentsDirectory =
       //     await getApplicationDocumentsDirectory();
       Directory? appDocumentsDirectory = await getExternalStorageDirectory();
@@ -54,8 +55,8 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
       return _watermarkImage!;
     }
 
-    void saveFile() async {
-      await [Permission.storage].request();
+    Future saveFile() async {
+      // await [Permission.storage].request();
       File file = File(await getFilePath());
       final byteData = await rootBundle.load('assets/images/foodss.png');
       file.writeAsBytes(byteData.buffer
@@ -83,29 +84,16 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
             const SizedBox(height: 32),
             ElevatedButton(
               onPressed: () async {
-                final image = await _screenshotController.capture();
-
-                if (image == null) {
-                  print('failed to capture');
-                } else {
-                  setState(() {
-                    img = image;
-                  });
-                  print('captured');
-                }
+                final ss = await _screenshotController.capture();
                 await getFilePath();
-                saveFile();
-              },
-              child: Text('capture, add icon to app dir'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                if (img == null) {
+                await saveFile();
+
+                if (ss == null) {
                   return;
                 }
                 _getWatermarkImgFile =
                     await getWatermarkImageFromFilesDirectory();
-                _getCapturedImgFile = await getCapturedImage(img!);
+                _getCapturedImgFile = await getCapturedImage(ss);
 
                 if (_getCapturedImgFile == null ||
                     _getWatermarkImgFile == null) {
@@ -142,7 +130,3 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
     );
   }
 }
-
-// Skipped 111 frames!  The application may be doing too much work on its main thread.
-
-
