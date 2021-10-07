@@ -19,10 +19,6 @@ class NewWatermarkScreen extends StatefulWidget {
 
 class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
   @override
-  // void initState() {
-  //   super.initState();
-  // }
-
   File? _capturedImage;
   File? _watermarkImage;
   Uint8List? _watermarkedImage;
@@ -35,25 +31,10 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
   File? gotCaptured;
   File? gotAppIcon;
 
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  // }
-
   final ScreenshotController _screenshotController = ScreenshotController();
 
   @override
   Widget build(BuildContext context) {
-    // Future saveAndShare(Uint8List bytes) async {
-    //   final directory = await getApplicationDocumentsDirectory();
-
-    //   final image = File('${directory.path}/flutter.png');
-    //   image.writeAsBytesSync(bytes);
-
-    //   final text = 'Download the app!';
-    //   await Share.shareFiles([image.path], text: text);
-    // }
-
     Future shareIt(Uint8List bytes) async {
       final directory = await getApplicationDocumentsDirectory();
 
@@ -62,17 +43,6 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
 
       final text = 'Download the app!';
       await Share.shareFiles([image.path], text: text);
-    }
-
-    Widget buildImage() {
-      return Container(
-        height: 200,
-        width: 300,
-        child: Image.network(
-          'https://images.unsplash.com/photo-1632952297232-0548107fdab3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=389&q=80',
-          fit: BoxFit.cover,
-        ),
-      );
     }
 
     Future<String> getFilePath() async {
@@ -104,15 +74,6 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
       final directory = await getApplicationDocumentsDirectory();
       _capturedImage = File('${directory.path}/flutter_image.png');
       _capturedImage!.writeAsBytesSync(bytes);
-
-      var decodedImage =
-          await decodeImageFromList(_capturedImage!.readAsBytesSync());
-      print('captured image details ----');
-      print('width');
-      print(decodedImage.width);
-      print('height');
-      print(decodedImage.height);
-
       return _capturedImage!;
     }
 
@@ -123,7 +84,10 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
         appBar: AppBar(),
         body: Column(
           children: [
-            buildImage(),
+            Container(
+              height: 200,
+              color: Colors.pinkAccent,
+            ),
             const SizedBox(height: 32),
             ElevatedButton(
               onPressed: () async {
@@ -138,16 +102,10 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
                   print('captured');
                   // await saveAndShare(image);
                 }
-              },
-              child: Text('capture only'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
                 await getFilePath();
                 saveFile();
-                // readFile();
               },
-              child: Text('create directory and add asset image'),
+              child: Text('capture, add icon to app dir'),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -194,47 +152,21 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
                 // Store the watermarked image to a File
                 List<int> wmImage = ui.encodePng(originalImage);
                 setState(() {
-                  // _watermarkedImage =
-                  // File.fromRawPath(Uint8List.fromList(wmImage));
                   _watermarkedImage = Uint8List.fromList(wmImage);
                 });
-                // _watermarkedImage =
-                //     File.fromRawPath(Uint8List.fromList(wmImage));
-
                 if (_watermarkedImage != null) {
-                  print('done watermarking');
-
                   await shareIt(_watermarkedImage!);
-                  print('sharing');
                 }
-
                 //end
               },
-              child: Text('process image'),
+              child: Text('watermark and share'),
             ),
-            if (gotCaptured != null)
-              Container(
-                height: 100,
-                width: 100,
-                child: Image.file(gotCaptured!),
-              ),
-            if (gotAppIcon != null)
-              Container(
-                height: 100,
-                width: 100,
-                child: Image.file(gotAppIcon!),
-              ),
           ],
         ),
       ),
     );
   }
 }
-
-// I/flutter (22455): width
-// I/flutter (22455): 1080
-// I/flutter (22455): height
-// I/flutter (22455): 1920
 
 // Skipped 111 frames!  The application may be doing too much work on its main thread.
 //error-> Unhandled Exception: Null check operator used on a null value

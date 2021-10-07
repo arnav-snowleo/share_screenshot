@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
 import './new_watermark_screen.dart';
-import './asset_screen.dart';
-import './my_screen.dart';
-import './watermark_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,10 +16,6 @@ class MyApp extends StatelessWidget {
       ),
       // home: MyWatermarkScreen(),
       home: NewWatermarkScreen(),
-      // home: AssetScreen(),
     );
   }
 }
-
-
-//flutter run --no-sound-null-safety
