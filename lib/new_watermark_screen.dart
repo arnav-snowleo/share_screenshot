@@ -27,9 +27,6 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
   File? _getCapturedImgFile;
   File? _getWatermarkImgFile;
 
-  File? gotCaptured;
-  File? gotAppIcon;
-
   final ScreenshotController _screenshotController = ScreenshotController();
 
   @override
@@ -104,25 +101,20 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
             ElevatedButton(
               onPressed: () async {
                 if (img == null) {
-                  print('returned');
                   return;
                 }
                 _getWatermarkImgFile =
                     await getWatermarkImageFromFilesDirectory();
                 _getCapturedImgFile = await getCapturedImage(img!);
 
-                setState(() {
-                  gotAppIcon = _getWatermarkImgFile;
-                  gotCaptured = _getCapturedImgFile;
-                });
-
-                if (gotCaptured == null || gotAppIcon == null) {
+                if (_getCapturedImgFile == null ||
+                    _getWatermarkImgFile == null) {
                   return;
                 }
                 ui.Image? originalImage =
-                    ui.decodeImage(gotCaptured!.readAsBytesSync());
+                    ui.decodeImage(_getCapturedImgFile!.readAsBytesSync());
                 ui.Image? watermarkImage =
-                    ui.decodeImage(gotAppIcon!.readAsBytesSync());
+                    ui.decodeImage(_getWatermarkImgFile!.readAsBytesSync());
 
                 ui.Image? image = ui.Image(50, 50);
                 ui.drawImage(image, watermarkImage!);
