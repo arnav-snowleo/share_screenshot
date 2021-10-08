@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import './new_watermark_screen.dart';
+import 'package:share_screenshot/watermark_over_screenshot_and_share.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,8 +13,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // home: MyWatermarkScreen(),
-      home: NewWatermarkScreen(),
+      home: WatermarkOverScreenShotAndShare(),
     );
   }
 }

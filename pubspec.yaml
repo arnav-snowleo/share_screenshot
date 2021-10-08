@@ -14,14 +14,9 @@ dependencies:
 
   screenshot: ^1.2.3
   share: ^2.0.4
-
   image: ^3.0.7
-  #image_picker: 
 
-  #image: ^3.0.7
-  #image_picker: ^0.8.4+2
   permission_handler: ^8.1.6
-
   path_provider: 
 
 dev_dependencies:
