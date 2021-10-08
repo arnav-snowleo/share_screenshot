@@ -12,13 +12,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:image/image.dart' as ui;
 
-class NewWatermarkScreen extends StatefulWidget {
-  @override
-  _NewWatermarkScreenState createState() => _NewWatermarkScreenState();
-}
-
-class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
-  @override
+// ignore: must_be_immutable
+class WatermarkOverScreenShotAndShare extends StatelessWidget {
   File? _capturedImage;
   File? _watermarkImage;
   Uint8List? _watermarkedImage;
@@ -26,7 +21,6 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
 
   File? _getCapturedImgFile;
   File? _getWatermarkImgFile;
-
   final ScreenshotController _screenshotController = ScreenshotController();
 
   @override
@@ -55,7 +49,7 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
       return _watermarkImage!;
     }
 
-    Future saveFile() async {
+    Future<Null> saveFile() async {
       // await [Permission.storage].request();
       File file = File(await getFilePath());
       final byteData = await rootBundle.load('assets/images/foodss.png');
@@ -115,9 +109,9 @@ class _NewWatermarkScreenState extends State<NewWatermarkScreen> {
                     originalImage.height - 50 - 25, 'try our app now');
 
                 List<int> wmImage = ui.encodePng(originalImage);
-                setState(() {
-                  _watermarkedImage = Uint8List.fromList(wmImage);
-                });
+
+                _watermarkedImage = Uint8List.fromList(wmImage);
+
                 if (_watermarkedImage != null) {
                   await shareIt(_watermarkedImage!);
                 }
